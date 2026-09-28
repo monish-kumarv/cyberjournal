@@ -243,8 +243,7 @@ User Inquiry: {query}
         # High Availability Waterfall: Confirmed active 2026 models and stable aliases
         available_models = [
             "gemini-3.8-flash",
-            "gemini-3.5-flash",
-            "gemini-2.5-flash"
+            "gemini-3.5-flash"
         ]
         last_error = ""
         
