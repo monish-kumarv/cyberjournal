@@ -6,6 +6,8 @@ import feedparser
 import requests
 import streamlit as st
 from google import genai
+from google import genai
+from google.genai import types
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -221,7 +223,12 @@ def ask_cj_analyst(query, context_corpus, api_key):
         return "Please configure a Gemini API key to interact with CJ."
         
     try:
-        client = genai.Client(api_key=api_key)
+        # Force the stable v1 API route, as v1beta has deprecated older models
+        client = genai.Client(
+            api_key=api_key,
+            http_options=types.HttpOptions(api_version="v1")
+        )
+        
         prompt = f"""
 You are 'CJ' (Cyber Journal AI), an authoritative Senior Cyber Threat Intelligence analyst.
 Answer the user's question directly, clearly, and concisely using the real-time threat feed context provided below.
@@ -233,12 +240,11 @@ Feed Context:
 User Inquiry: {query}
 """
         
-        # High Availability Waterfall: Current active API models
+        # High Availability Waterfall: Confirmed active 2026 models and stable aliases
         available_models = [
             "gemini-3.8-flash",
-            "gemini-3.1-pro-preview",
-            "gemini-2.0-flash",
-            "gemini-1.5-flash"
+            "gemini-3.5-flash",
+            "gemini-flash-latest"
         ]
         last_error = ""
         
@@ -253,7 +259,7 @@ User Inquiry: {query}
                 last_error = str(e)
                 continue
                 
-        return f"CJ Analyst error: All fallback models are temporarily overloaded. Last error: {last_error}"
+        return f"CJ Analyst error: All fallback models failed. Last error: {last_error}"
         
     except Exception as e:
         return f"CJ Analyst error: Failed to initialize client. {str(e)}"
