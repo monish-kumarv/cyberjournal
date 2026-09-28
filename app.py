@@ -233,11 +233,12 @@ Feed Context:
 User Inquiry: {query}
 """
         
-        # High Availability Waterfall: Current active models
+        # High Availability Waterfall: Current active API models
         available_models = [
             "gemini-3.8-flash",
-            "gemini-2.5-flash",
-            "gemini-2.5-pro"
+            "gemini-3.1-pro-preview",
+            "gemini-2.0-flash",
+            "gemini-1.5-flash"
         ]
         last_error = ""
         
